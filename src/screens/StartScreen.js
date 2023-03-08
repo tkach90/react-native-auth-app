@@ -21,7 +21,14 @@ export default function StartScreen({ navigation}) {
 			>
 				Login
 			</Button>
-			<Button mode="contained">Sign up</Button>
+			<Button
+				mode="contained"
+				onPress={() => {
+					navigation.navigate('RegisterScreen')
+				}}
+			>
+				Sign up
+			</Button>
 		</Background>
 	)
 }
