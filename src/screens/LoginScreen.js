@@ -10,6 +10,7 @@ import BackButton from "../components/BackButton";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {theme} from "../core/theme";
 import {loginUser} from "../api/auth-api";
+import GoogleLogin from "./GoogleLogin";
 
 export default function LoginScreen({ navigation }) {
 	const [email, setEmail] = useState({ value: '', error: '' });
@@ -34,8 +35,6 @@ export default function LoginScreen({ navigation }) {
 		})
 		if (response.error) {
 			alert(response.error);
-		} else {
-			alert(response.user.displayName);
 		}
 
 		setLoading(false);
@@ -73,6 +72,7 @@ export default function LoginScreen({ navigation }) {
 			>
 				Login
 			</Button>
+			<GoogleLogin />
 			<View style={styles.row}>
 				<Text>Don`t have an account?</Text>
 				<TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>

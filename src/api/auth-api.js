@@ -41,5 +41,8 @@ export async function sendEmailWithPassword (email) {
 			error: error.message,
 		};
 	}
+}
 
+export function logoutUser() {
+	firebase.auth().signOut();
 }
