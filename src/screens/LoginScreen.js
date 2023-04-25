@@ -9,12 +9,14 @@ import { passwordValidator } from "../core/helpers/passwordValidator";
 import BackButton from "../components/BackButton";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {theme} from "../core/theme";
+import {loginUser} from "../api/auth-api";
 
 export default function LoginScreen({ navigation }) {
 	const [email, setEmail] = useState({ value: '', error: '' });
 	const [password, setPassword] = useState({ value: '', error: '' });
+	const [loading, setLoading] = useState(false);
 
-	const onLoginPressed = () => {
+	const onLoginPressed = async () => {
 		const emailError = emailValidator(email.value);
 		const passwordError = passwordValidator(password.value);
 
@@ -22,6 +24,21 @@ export default function LoginScreen({ navigation }) {
 			setEmail({ ...email, error: emailError });
 			setPassword({ ...password, error: passwordError });
 		}
+
+		setLoading(true);
+
+		const response = await loginUser({
+			name: name.value,
+			email: email.value,
+			password: password.value,
+		})
+		if (response.error) {
+			alert(response.error);
+		} else {
+			alert(response.user.displayName);
+		}
+
+		setLoading(false);
 	}
 
 	return (
@@ -52,6 +69,7 @@ export default function LoginScreen({ navigation }) {
 			<Button
 				mode="contained"
 				onPress={onLoginPressed}
+				loading={loading}
 			>
 				Login
 			</Button>

@@ -30,6 +30,8 @@ export default function RegisterScreen({ navigation }) {
 			setPassword({ ...password, error: passwordError });
 		}
 
+		setLoading(true);
+
 		const response = await signUpUser({
 			name: name.value,
 			email: email.value,
@@ -40,6 +42,8 @@ export default function RegisterScreen({ navigation }) {
 		} else {
 			alert(response.user.displayName)
 		}
+
+		setLoading(false);
 	}
 
 	return (

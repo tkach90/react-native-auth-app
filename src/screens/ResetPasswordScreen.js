@@ -6,16 +6,30 @@ import Logo from "../components/Logo";
 import TextInput from "../components/TextInput";
 import { emailValidator } from "../core/helpers/emailValidator";
 import BackButton from "../components/BackButton";
+import {sendEmailWithPassword} from "../api/auth-api";
 
 export default function ResetPasswordScreen({ navigation }) {
 	const [email, setEmail] = useState({ value: '', error: '' });
+	const [loading, setLoading] = useState(false);
 
-	const onSubmitPressed = () => {
+	const onSubmitPressed = async () => {
 		const emailError = emailValidator(email.value);
 
 		if (emailError) {
 			setEmail({ ...email, error: emailError });
 		}
+
+		setLoading(true);
+
+		const response = await sendEmailWithPassword(email.value);
+
+		if (response.error) {
+			alert(response.error);
+		} else {
+			alert('Email with the password has been sent.');
+		}
+
+		setLoading(false);
 	}
 
 	return (
@@ -34,6 +48,7 @@ export default function ResetPasswordScreen({ navigation }) {
 			<Button
 				mode="contained"
 				onPress={onSubmitPressed}
+				loading={loading}
 			>
 				Send Instructions
 			</Button>
