@@ -10,21 +10,35 @@ import { emailValidator } from "../core/helpers/emailValidator";
 import { passwordValidator } from "../core/helpers/passwordValidator";
 import { nameValidator } from "../core/helpers/nameValidator";
 import BackButton from "../components/BackButton";
+import {signUpUser} from "../api/auth-api";
+
 
 export default function RegisterScreen({ navigation }) {
 	const [email, setEmail] = useState({ value: '', error: '' });
 	const [password, setPassword] = useState({ value: '', error: '' });
 	const [name, setName] = useState({ value: '', error: '' });
+	const [loading, setLoading] = useState(false);
 
-	const onSignUpPressed = () => {
+	const onSignUpPressed = async () => {
 		const emailError = emailValidator(email.value);
 		const passwordError = passwordValidator(password.value);
 		const nameError = nameValidator(name.value);
 
-		if (emailError) {
+		if (emailError || passwordError || nameError) {
 			setName({ ...name, error: nameError });
 			setEmail({ ...email, error: emailError });
 			setPassword({ ...password, error: passwordError });
+		}
+
+		const response = await signUpUser({
+			name: name.value,
+			email: email.value,
+			password: password.value,
+		})
+		if (response.error) {
+			alert(response.error)
+		} else {
+			alert(response.user.displayName)
 		}
 	}
 
@@ -56,6 +70,7 @@ export default function RegisterScreen({ navigation }) {
 				label="Name"
 			/>
 			<Button
+				loading={loading}
 				mode="contained"
 				onPress={onSignUpPressed}
 			>
